@@ -11,21 +11,27 @@ func (m model) View() string {
 
 	reqMethodStyle := lipgloss.NewStyle()
 
-	inputStyle := lipgloss.NewStyle().
+	urlInputStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1).
 		Width(m.width - 30)
+	if m.focusedComponent == 0 {
+		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color("62"))
+	}
 
-	outputStyle := lipgloss.NewStyle().
+	viewportStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1).
 		Width(m.width - 10)
+	if m.focusedComponent == 1 {
+		viewportStyle = viewportStyle.BorderForeground(lipgloss.Color("62"))
+	}
 
-	urlInput := inputStyle.Render(m.urlInput.View())
+	urlInput := urlInputStyle.Render(m.urlInput.View())
 	reqMethod := reqMethodStyle.Render(m.reqMethod.View())
 
 	outputContent := m.output
-	outputBox := outputStyle.Render(outputContent)
+	outputBox := viewportStyle.Render(outputContent)
 
 	queryForms := lipgloss.JoinHorizontal(lipgloss.Bottom, reqMethod, urlInput)
 	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, outputBox)

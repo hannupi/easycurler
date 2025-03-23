@@ -3,16 +3,27 @@ package main
 import (
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
+	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+type focusableComponent int
+
+const (
+	focusURL focusableComponent = iota
+	focusViewport
+	NumOfFocusableComponents
+)
+
 type model struct {
-	reqMethod list.Model
-	urlInput  textinput.Model
-	output    string
-	err       error
-	width     int
-	height    int
+	reqMethod        list.Model
+	urlInput         textinput.Model
+	output           string
+	err              error
+	width            int
+	height           int
+	viewport         viewport.Model
+	focusedComponent focusableComponent
 }
 
 func (m model) Init() tea.Cmd {
@@ -25,11 +36,15 @@ func initialModel() model {
 	ti.Prompt = "URL: "
 	ti.CharLimit = 2048
 	ti.Width = 40
-	ti.SetValue("https://example.com")
+	ti.SetValue("example.com")
 	ti.Focus()
 
+	vp := viewport.New(80, 20)
+
 	return model{
-		urlInput: ti,
+		urlInput:         ti,
+		viewport:         vp,
+		focusedComponent: 0,
 	}
 }
 
@@ -48,6 +63,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c":
 			return m, tea.Quit
+		case "tab":
+			m.focusedComponent = (m.focusedComponent + 1) % NumOfFocusableComponents
+			if m.focusedComponent == focusURL {
+				m.urlInput.Focus()
+			} else {
+				m.urlInput.Blur()
+			}
+			return m, nil
 		case "enter":
 			return m, fetchURL(m.urlInput.Value())
 		}
