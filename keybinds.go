@@ -14,12 +14,12 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 		if m.focusedComponent != focusURL {
 			return m, tea.Quit
 		}
-	case "j":
+	case "down", "j":
 		if m.focusedComponent == focusViewport {
 			m.viewport.LineDown(3)
 			return m, nil
 		}
-	case "k":
+	case "up", "k":
 		if m.focusedComponent == focusViewport {
 			m.viewport.LineUp(3)
 			return m, nil
