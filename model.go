@@ -52,7 +52,6 @@ type httpResMsg string
 type errMsg error
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
@@ -60,49 +59,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "ctrl+c":
-			return m, tea.Quit
-		case "q":
-			if m.focusedComponent != focusURL {
-				return m, tea.Quit
-			}
-		case "j":
-			if m.focusedComponent == focusViewport {
-				m.viewport.LineDown(3)
-				return m, nil
-			}
-		case "k":
-			if m.focusedComponent == focusViewport {
-				m.viewport.LineUp(3)
-				return m, nil
-			}
-		case "tab":
-			m.focusedComponent = (m.focusedComponent + 1) % NumOfFocusableComponents
-			if m.focusedComponent == focusURL {
-				m.urlInput.Focus()
-			} else {
-				m.urlInput.Blur()
-			}
-			return m, nil
-		case "shift+tab":
-			m.focusedComponent = (m.focusedComponent - 1) % NumOfFocusableComponents
-			if m.focusedComponent == focusURL {
-				m.urlInput.Focus()
-			} else {
-				m.urlInput.Blur()
-			}
-			return m, nil
-		case "enter":
-			if m.focusedComponent == focusURL {
-				return m, fetchURL(m.urlInput.Value())
-			}
-		case "?":
-			// TODO help keybind menu
-			return nil, nil
-		}
-		m.urlInput, cmd = m.urlInput.Update(msg)
-		return m, cmd
+		return handleKeyInput(msg, m)
 
 	case httpResMsg:
 		m.viewport.SetContent(string(msg))
