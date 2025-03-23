@@ -10,6 +10,10 @@ import (
 
 func fetchURL(url string) tea.Cmd {
 	return func() tea.Msg {
+		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+			url = "https://" + url
+		}
+
 		res, err := http.Get(url)
 		if err != nil {
 			return errMsg(err)
