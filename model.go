@@ -18,7 +18,7 @@ const (
 type model struct {
 	reqMethod        list.Model
 	urlInput         textinput.Model
-	output           string
+	resContent       string
 	err              error
 	width            int
 	height           int
@@ -33,13 +33,13 @@ func (m model) Init() tea.Cmd {
 func initialModel() model {
 	ti := textinput.New()
 	ti.Placeholder = "Enter URL"
-	ti.Prompt = "URL: "
 	ti.CharLimit = 2048
 	ti.Width = 40
 	ti.SetValue("example.com")
 	ti.Focus()
 
-	vp := viewport.New(80, 20)
+	vp := viewport.New(50, 10)
+	vp.SetContent("asdfasdf")
 
 	return model{
 		urlInput:         ti,
@@ -63,6 +63,20 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c":
 			return m, tea.Quit
+		case "q":
+			if m.focusedComponent != focusURL {
+				return m, tea.Quit
+			}
+		case "j":
+			if m.focusedComponent == focusViewport {
+				m.viewport.LineDown(3)
+				return m, nil
+			}
+		case "k":
+			if m.focusedComponent == focusViewport {
+				m.viewport.LineUp(3)
+				return m, nil
+			}
 		case "tab":
 			m.focusedComponent = (m.focusedComponent + 1) % NumOfFocusableComponents
 			if m.focusedComponent == focusURL {
@@ -71,19 +85,33 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.urlInput.Blur()
 			}
 			return m, nil
+		case "shift+tab":
+			m.focusedComponent = (m.focusedComponent - 1) % NumOfFocusableComponents
+			if m.focusedComponent == focusURL {
+				m.urlInput.Focus()
+			} else {
+				m.urlInput.Blur()
+			}
+			return m, nil
 		case "enter":
-			return m, fetchURL(m.urlInput.Value())
+			if m.focusedComponent == focusURL {
+				return m, fetchURL(m.urlInput.Value())
+			}
+		case "?":
+			// TODO help keybind menu
+			return nil, nil
 		}
 		m.urlInput, cmd = m.urlInput.Update(msg)
 		return m, cmd
 
 	case httpResMsg:
-		m.output = string(msg)
+		m.viewport.SetContent(string(msg))
+		m.viewport.GotoTop()
 		return m, nil
 
 	case errMsg:
 		m.err = msg
-		m.output = "Error: " + msg.Error()
+		m.resContent = "Error: " + msg.Error()
 		return m, nil
 	}
 	return m, nil

@@ -6,7 +6,8 @@ import (
 
 func (m model) View() string {
 	if m.err != nil {
-		return m.output + "\n\nPress any key to exit."
+		// TODO dont error out if bad req
+		return m.resContent + "\n\nPress ctrl+c to exit."
 	}
 
 	reqMethodStyle := lipgloss.NewStyle()
@@ -15,26 +16,26 @@ func (m model) View() string {
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1).
 		Width(m.width - 30)
-	if m.focusedComponent == 0 {
+	if m.focusedComponent == focusURL {
 		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color("62"))
 	}
 
 	viewportStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1).
-		Width(m.width - 10)
-	if m.focusedComponent == 1 {
+		Width(m.width - 10).
+		Height(10)
+	if m.focusedComponent == focusViewport {
 		viewportStyle = viewportStyle.BorderForeground(lipgloss.Color("62"))
 	}
+
+	viewportBox := viewportStyle.Render(m.viewport.View())
 
 	urlInput := urlInputStyle.Render(m.urlInput.View())
 	reqMethod := reqMethodStyle.Render(m.reqMethod.View())
 
-	outputContent := m.output
-	outputBox := viewportStyle.Render(outputContent)
-
 	queryForms := lipgloss.JoinHorizontal(lipgloss.Bottom, reqMethod, urlInput)
-	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, outputBox)
+	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, viewportBox)
 
 	modalStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder(), false, false, false, false).
