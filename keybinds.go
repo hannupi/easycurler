@@ -11,46 +11,46 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 	case "ctrl+c":
 		return m, tea.Quit
 	case "q":
-		if m.focusedComponent != focusURL {
+		if m.FocusedComponent != FocusURL {
 			return m, tea.Quit
 		}
 	case "down", "j":
-		if m.focusedComponent == focusViewport {
-			m.viewport.LineDown(3)
+		if m.FocusedComponent == FocusViewport {
+			m.Viewport.LineDown(3)
 			return m, nil
 		}
 	case "up", "k":
-		if m.focusedComponent == focusViewport {
-			m.viewport.LineUp(3)
+		if m.FocusedComponent == FocusViewport {
+			m.Viewport.LineUp(3)
 			return m, nil
 		}
 	case "tab":
-		m.focusedComponent = (m.focusedComponent + 1) % NumOfFocusableComponents
-		if m.focusedComponent == focusURL {
-			m.urlInput.Focus()
+		m.FocusedComponent = (m.FocusedComponent + 1) % NumOfFocusableComponents
+		if m.FocusedComponent == FocusURL {
+			m.UrlInput.Focus()
 		} else {
-			m.urlInput.Blur()
+			m.UrlInput.Blur()
 		}
 		return m, nil
 	case "shift+tab":
-		m.focusedComponent = (m.focusedComponent - 1) % NumOfFocusableComponents
-		if m.focusedComponent == focusURL {
-			m.urlInput.Focus()
+		m.FocusedComponent = (m.FocusedComponent - 1) % NumOfFocusableComponents
+		if m.FocusedComponent == FocusURL {
+			m.UrlInput.Focus()
 		} else {
-			m.urlInput.Blur()
+			m.UrlInput.Blur()
 		}
 		return m, nil
 	case "enter":
-		if m.focusedComponent == focusURL {
-			return m, fetchURL(m.urlInput.Value())
+		if m.FocusedComponent == FocusURL {
+			return m, fetchURL(m.UrlInput.Value())
 		}
 	case "?":
 		// TODO help keybind menu
 		return m, nil
 	}
 
-	if m.focusedComponent == focusURL {
-		m.urlInput, cmd = m.urlInput.Update(msg)
+	if m.FocusedComponent == FocusURL {
+		m.UrlInput, cmd = m.UrlInput.Update(msg)
 	}
 	return m, cmd
 }

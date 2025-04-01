@@ -10,20 +10,20 @@ import (
 type focusableComponent int
 
 const (
-	focusURL focusableComponent = iota
-	focusViewport
+	FocusURL focusableComponent = iota
+	FocusViewport
+	FocusReqMethod
 	NumOfFocusableComponents
 )
 
 type model struct {
-	reqMethod        list.Model
-	urlInput         textinput.Model
-	resContent       string
-	err              error
-	width            int
-	height           int
-	viewport         viewport.Model
-	focusedComponent focusableComponent
+	ReqMethods       list.Model
+	UrlInput         textinput.Model
+	Err              error
+	Width            int
+	Height           int
+	Viewport         viewport.Model
+	FocusedComponent focusableComponent
 }
 
 func (m model) Init() tea.Cmd {
@@ -39,12 +39,11 @@ func initialModel() model {
 	ti.Focus()
 
 	vp := viewport.New(50, 10)
-	vp.SetContent("asdfasdf")
 
 	return model{
-		urlInput:         ti,
-		viewport:         vp,
-		focusedComponent: 0,
+		UrlInput:         ti,
+		Viewport:         vp,
+		FocusedComponent: 0,
 	}
 }
 
@@ -54,21 +53,20 @@ type errMsg error
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.width = msg.Width
-		m.height = msg.Height
+		m.Width = msg.Width
+		m.Height = msg.Height
 		return m, nil
 
 	case tea.KeyMsg:
 		return handleKeyInput(msg, m)
 
 	case httpResMsg:
-		m.viewport.SetContent(string(msg))
-		m.viewport.GotoTop()
+		m.Viewport.SetContent(string(msg))
+		m.Viewport.GotoTop()
 		return m, nil
 
 	case errMsg:
-		m.err = msg
-		m.resContent = "Error: " + msg.Error()
+		m.Err = msg
 		return m, nil
 	}
 	return m, nil
