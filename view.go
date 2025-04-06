@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -10,7 +12,12 @@ func (m model) View() string {
 		m.Viewport.SetContent(m.Err.Error())
 	}
 
-	reqMethodStyle := lipgloss.NewStyle()
+	reqMethodStyle := lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder()).
+		Padding(0, 1)
+	if m.FocusedComponent == FocusReqMethod {
+		reqMethodStyle = reqMethodStyle.BorderForeground(lipgloss.Color("62"))
+	}
 
 	urlInputStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
@@ -30,9 +37,12 @@ func (m model) View() string {
 	}
 
 	viewportBox := viewportStyle.Render(m.Viewport.View())
+	if m.DropDownOpen {
+		return fmt.Sprintf("Select HTTP Method:\n%s\n(Enter to select next, Esc to cancel)", m.ReqMethods.View())
+	}
 
 	urlInput := urlInputStyle.Render(m.UrlInput.View())
-	reqMethod := reqMethodStyle.Render(m.ReqMethods.View())
+	reqMethod := reqMethodStyle.Render(string(m.SelectedMethod))
 
 	queryForms := lipgloss.JoinHorizontal(lipgloss.Bottom, reqMethod, urlInput)
 	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, viewportBox)
