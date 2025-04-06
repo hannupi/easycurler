@@ -35,7 +35,7 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 		}
 		return m, nil
 	case "shift+tab":
-		m.FocusedComponent = (m.FocusedComponent - 1) % NumOfFocusableComponents
+		m.FocusedComponent = (m.FocusedComponent - 1 + NumOfFocusableComponents) % NumOfFocusableComponents
 		if m.FocusedComponent == FocusURL {
 			m.UrlInput.Focus()
 		} else {
