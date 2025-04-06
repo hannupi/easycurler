@@ -71,11 +71,13 @@ func initialModel() model {
 	l.SetShowPagination(false)
 	l.SetFilteringEnabled(false)
 	l.SetShowHelp(false)
+
 	ti := textinput.New()
 	ti.Placeholder = "Enter URL"
 	ti.CharLimit = 2048
 	ti.Width = 40
 	ti.SetValue("example.com")
+	ti.Prompt = ""
 	ti.Focus()
 
 	vp := viewport.New(50, 10)
@@ -115,6 +117,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return handleKeyInput(msg, m)
 
 	case httpResMsg:
+		if m.Viewport.Height != m.Height-30 {
+			// check if there is a cleaner way to resize the text box
+			// WindowSizeMsg is sent to func Update in init?
+			m.Viewport = viewport.New(0, m.Height-30)
+		}
 		m.Viewport.SetContent(string(msg))
 		m.Viewport.GotoTop()
 		return m, nil

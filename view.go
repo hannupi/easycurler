@@ -31,7 +31,7 @@ func (m model) View() string {
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1).
 		Width(m.Width - 10).
-		Height(10)
+		Height(m.Height - 30)
 	if m.FocusedComponent == FocusViewport {
 		viewportStyle = viewportStyle.BorderForeground(lipgloss.Color("62"))
 	}
