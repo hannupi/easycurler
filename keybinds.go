@@ -44,7 +44,7 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 		return m, nil
 	case "enter":
 		if m.FocusedComponent == FocusURL {
-			return m, fetchURL(m.UrlInput.Value())
+			return m, fetchURL(m.UrlInput.Value(), m.SelectedMethod.String())
 		}
 		if m.FocusedComponent == FocusReqMethod {
 			m.DropDownOpen = true
