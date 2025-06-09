@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"fmt"
@@ -11,13 +11,12 @@ import (
 )
 
 func fetchURL(url string, reqMethod string) tea.Cmd {
-	method := reqMethod
 	return func() tea.Msg {
 		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
 			url = "https://" + url
 		}
 
-		req, err := http.NewRequest(method, url, nil)
+		req, err := http.NewRequest(reqMethod, url, nil)
 		if err != nil {
 			return errMsg(err)
 		}

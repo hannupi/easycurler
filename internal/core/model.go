@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"fmt"
@@ -10,16 +10,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type focusableComponent int
-type reqMethod string
-
-func (r reqMethod) FilterValue() string { return string(r) }
-func (r reqMethod) String() string      { return string(r) }
-
-type methodDelegate struct{}
-
-func (d methodDelegate) Height() int  { return 1 }
-func (d methodDelegate) Spacing() int { return 0 }
 func (d methodDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd {
 	return nil
 }
@@ -31,13 +21,6 @@ func (d methodDelegate) Render(w io.Writer, m list.Model, index int, item list.I
 	}
 	fmt.Fprintf(w, "%s%s", cursor, method)
 }
-
-const (
-	FocusURL focusableComponent = iota
-	FocusViewport
-	FocusReqMethod
-	NumOfFocusableComponents
-)
 
 type model struct {
 	ReqMethods       list.Model
@@ -55,7 +38,7 @@ func (m model) Init() tea.Cmd {
 	return nil
 }
 
-func initialModel() model {
+func InitialModel() model {
 	methods := []list.Item{
 		reqMethod("GET"),
 		reqMethod("POST"),
@@ -90,45 +73,4 @@ func initialModel() model {
 		SelectedMethod:   reqMethod("GET"),
 		DropDownOpen:     false,
 	}
-}
-
-type httpResMsg string
-type errMsg error
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if m.DropDownOpen {
-		var cmd tea.Cmd
-		m.ReqMethods, cmd = m.ReqMethods.Update(msg)
-
-		if key, ok := msg.(tea.KeyMsg); ok && key.Type == tea.KeyEnter {
-			m.SelectedMethod = m.ReqMethods.SelectedItem().(reqMethod)
-			m.DropDownOpen = false
-			return m, nil
-		}
-		return m, cmd
-	}
-	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		m.Width = msg.Width
-		m.Height = msg.Height
-		return m, nil
-
-	case tea.KeyMsg:
-		return handleKeyInput(msg, m)
-
-	case httpResMsg:
-		if m.Viewport.Height != m.Height-30 {
-			// check if there is a cleaner way to resize the text box
-			// WindowSizeMsg is sent to func Update in init?
-			m.Viewport = viewport.New(0, m.Height-30)
-		}
-		m.Viewport.SetContent(string(msg))
-		m.Viewport.GotoTop()
-		return m, nil
-
-	case errMsg:
-		m.Err = msg
-		return m, nil
-	}
-	return m, nil
 }

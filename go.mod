@@ -1,4 +1,4 @@
-module easycurler
+module github.com/hannupi/easycurler
 
 go 1.23.5
 
