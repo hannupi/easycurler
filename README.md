@@ -1,6 +1,18 @@
-Easycurler is a TUI application meant to make HTTP queries easier to form
+# Easycurler
 
-User should be able to:
-- Import and export curls to be able to share queries
-- Write the queries in an easy way as curl flags are easy to forget
-- Have an ad/login free experience
+Easycurler is a TUI application meant to make HTTP requests easier to form
+
+## Goals
+
+- [ ] Import and export request as curl to be able to share queries and version control
+- [ ] Request forming should be easier than curl
+
+## Out of scope currently
+
+- GraphQL etc
+
+## Why easycurler?
+
+- I want TUI request tool to go along with my nvim/lazygit setup
+- Postman is very clunky, requires logging in and booting up the app
+- With Go I believe I can achieve better responsiveness
