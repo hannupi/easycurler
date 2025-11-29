@@ -17,25 +17,27 @@ func (m model) View() string {
 	}
 
 	reqMethodStyle := lipgloss.NewStyle().
-		Border(lipgloss.NormalBorder()).
-		Padding(0, 1)
+		AlignHorizontal(lipgloss.Center).
+		Border(lipgloss.RoundedBorder()).
+		Padding(0, 1).
+		Width(8)
 	if m.FocusedComponent == FocusReqMethod {
 		reqMethodStyle = reqMethodStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
 	urlInputStyle := lipgloss.NewStyle().
-		Border(lipgloss.NormalBorder()).
+		Border(lipgloss.RoundedBorder()).
 		Padding(0, 1).
-		Width(m.Width - 30)
+		Width(m.Width - 15)
 	if m.FocusedComponent == FocusURL {
 		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
 	responseBoxStyle := lipgloss.NewStyle().
-		Border(lipgloss.NormalBorder()).
+		Border(lipgloss.RoundedBorder()).
 		Padding(0, 1).
-		Width(m.Width - 10).
-		Height(m.Height - 30)
+		Width(m.Width - 5).
+		Height(m.Height - 10)
 	if m.FocusedComponent == FocusResponseBox {
 		responseBoxStyle = responseBoxStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
