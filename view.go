@@ -6,6 +6,10 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+const (
+	selectedBorderColor = "61"
+)
+
 func (m model) View() string {
 	if m.Err != nil {
 		// TODO recover from bad req
@@ -16,7 +20,7 @@ func (m model) View() string {
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1)
 	if m.FocusedComponent == FocusReqMethod {
-		reqMethodStyle = reqMethodStyle.BorderForeground(lipgloss.Color("62"))
+		reqMethodStyle = reqMethodStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
 	urlInputStyle := lipgloss.NewStyle().
@@ -24,7 +28,7 @@ func (m model) View() string {
 		Padding(0, 1).
 		Width(m.Width - 30)
 	if m.FocusedComponent == FocusURL {
-		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color("62"))
+		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
 	viewportStyle := lipgloss.NewStyle().
@@ -33,7 +37,7 @@ func (m model) View() string {
 		Width(m.Width - 10).
 		Height(m.Height - 30)
 	if m.FocusedComponent == FocusViewport {
-		viewportStyle = viewportStyle.BorderForeground(lipgloss.Color("62"))
+		viewportStyle = viewportStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
 	viewportBox := viewportStyle.Render(m.Viewport.View())
