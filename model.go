@@ -10,8 +10,10 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type focusableComponent int
-type reqMethod string
+type (
+	focusableComponent int
+	reqMethod          string
+)
 
 func (r reqMethod) FilterValue() string { return string(r) }
 func (r reqMethod) String() string      { return string(r) }
@@ -23,6 +25,7 @@ func (d methodDelegate) Spacing() int { return 0 }
 func (d methodDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd {
 	return nil
 }
+
 func (d methodDelegate) Render(w io.Writer, m list.Model, index int, item list.Item) {
 	method := item.(reqMethod)
 	cursor := "  "
@@ -34,7 +37,7 @@ func (d methodDelegate) Render(w io.Writer, m list.Model, index int, item list.I
 
 const (
 	FocusURL focusableComponent = iota
-	FocusViewport
+	FocusResponseBox
 	FocusReqMethod
 	NumOfFocusableComponents
 )
@@ -47,7 +50,7 @@ type model struct {
 	Err              error
 	Width            int
 	Height           int
-	Viewport         viewport.Model
+	ResponseBox      viewport.Model
 	FocusedComponent focusableComponent
 }
 
@@ -65,7 +68,7 @@ func initialModel() model {
 	}
 
 	const width = 20
-	var height = len(methods) + 2
+	height := len(methods) + 2
 	l := list.New(methods, methodDelegate{}, width, height)
 	l.SetShowTitle(false)
 	l.SetShowPagination(false)
@@ -84,7 +87,7 @@ func initialModel() model {
 
 	return model{
 		UrlInput:         ti,
-		Viewport:         vp,
+		ResponseBox:      vp,
 		FocusedComponent: 0,
 		ReqMethods:       l,
 		SelectedMethod:   reqMethod("GET"),
@@ -92,8 +95,10 @@ func initialModel() model {
 	}
 }
 
-type httpResMsg string
-type errMsg error
+type (
+	httpResMsg string
+	errMsg     error
+)
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.DropDownOpen {
@@ -117,13 +122,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return handleKeyInput(msg, m)
 
 	case httpResMsg:
-		if m.Viewport.Height != m.Height-30 {
+		if m.ResponseBox.Height != m.Height-30 {
 			// check if there is a cleaner way to resize the text box
 			// WindowSizeMsg is sent to func Update in init?
-			m.Viewport = viewport.New(0, m.Height-30)
+			m.ResponseBox = viewport.New(0, m.Height-30)
 		}
-		m.Viewport.SetContent(string(msg))
-		m.Viewport.GotoTop()
+		m.ResponseBox.SetContent(string(msg))
+		m.ResponseBox.GotoTop()
 		return m, nil
 
 	case errMsg:

@@ -13,7 +13,7 @@ const (
 func (m model) View() string {
 	if m.Err != nil {
 		// TODO recover from bad req
-		m.Viewport.SetContent(m.Err.Error())
+		m.ResponseBox.SetContent(m.Err.Error())
 	}
 
 	reqMethodStyle := lipgloss.NewStyle().
@@ -31,16 +31,16 @@ func (m model) View() string {
 		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
-	viewportStyle := lipgloss.NewStyle().
+	responseBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		Padding(0, 1).
 		Width(m.Width - 10).
 		Height(m.Height - 30)
-	if m.FocusedComponent == FocusViewport {
-		viewportStyle = viewportStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
+	if m.FocusedComponent == FocusResponseBox {
+		responseBoxStyle = responseBoxStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
-	viewportBox := viewportStyle.Render(m.Viewport.View())
+	responseBox := responseBoxStyle.Render(m.ResponseBox.View())
 	if m.DropDownOpen {
 		return fmt.Sprintf("Select HTTP Method:\n%s\n(Enter to select next, Esc to cancel)", m.ReqMethods.View())
 	}
@@ -49,7 +49,7 @@ func (m model) View() string {
 	reqMethod := reqMethodStyle.Render(string(m.SelectedMethod))
 
 	queryForms := lipgloss.JoinHorizontal(lipgloss.Bottom, reqMethod, urlInput)
-	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, viewportBox)
+	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, responseBox)
 
 	modalStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder(), false, false, false, false).

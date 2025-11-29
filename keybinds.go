@@ -17,13 +17,13 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case "down", "j":
-		if m.FocusedComponent == FocusViewport {
-			m.Viewport.LineDown(3)
+		if m.FocusedComponent == FocusResponseBox {
+			m.ResponseBox.LineDown(3)
 			return m, nil
 		}
 	case "up", "k":
-		if m.FocusedComponent == FocusViewport {
-			m.Viewport.LineUp(3)
+		if m.FocusedComponent == FocusResponseBox {
+			m.ResponseBox.LineUp(3)
 			return m, nil
 		}
 	case "tab":
