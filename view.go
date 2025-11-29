@@ -10,6 +10,17 @@ const (
 	selectedBorderColor = "61"
 )
 
+var reqMethodStyleBorder = lipgloss.Border{
+	Top:         lipgloss.NormalBorder().Top,
+	Bottom:      lipgloss.NormalBorder().Bottom,
+	Left:        lipgloss.RoundedBorder().Left,
+	Right:       lipgloss.NormalBorder().Right,
+	TopLeft:     lipgloss.RoundedBorder().TopLeft,
+	TopRight:    lipgloss.NormalBorder().TopRight,
+	BottomLeft:  lipgloss.RoundedBorder().BottomLeft,
+	BottomRight: lipgloss.NormalBorder().BottomRight,
+}
+
 func (m model) View() string {
 	if m.Err != nil {
 		// TODO recover from bad req
@@ -18,17 +29,16 @@ func (m model) View() string {
 
 	reqMethodStyle := lipgloss.NewStyle().
 		AlignHorizontal(lipgloss.Center).
-		Border(lipgloss.RoundedBorder()).
-		Padding(0, 1).
-		Width(8)
+		Border(reqMethodStyleBorder).
+		Width(10)
 	if m.FocusedComponent == FocusReqMethod {
 		reqMethodStyle = reqMethodStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
 	urlInputStyle := lipgloss.NewStyle().
-		Border(lipgloss.RoundedBorder()).
+		Border(lipgloss.RoundedBorder(), true, true, true, false).
 		Padding(0, 1).
-		Width(m.Width - 15)
+		Width(m.Width - 16)
 	if m.FocusedComponent == FocusURL {
 		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
