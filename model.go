@@ -47,7 +47,7 @@ type model struct {
 	ReqMethods         list.Model
 	SelectedMethod     reqMethod
 	DropDownOpen       bool
-	UrlInput           textinput.Model
+	URLInput           textinput.Model
 	Width              int
 	Height             int
 	RequestSettingsBox viewport.Model
@@ -90,7 +90,7 @@ func initialModel() model {
 	responseBoxViewport := viewport.New(0, 0)
 
 	return model{
-		UrlInput:           ti,
+		URLInput:           ti,
 		RequestSettingsBox: requestSettingsBoxViewport,
 		ResponseBox:        responseBoxViewport,
 		FocusedComponent:   0,

@@ -29,22 +29,22 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 	case "tab":
 		m.FocusedComponent = (m.FocusedComponent + 1) % NumOfFocusableComponents
 		if m.FocusedComponent == FocusURL {
-			m.UrlInput.Focus()
+			m.URLInput.Focus()
 		} else {
-			m.UrlInput.Blur()
+			m.URLInput.Blur()
 		}
 		return m, nil
 	case "shift+tab":
 		m.FocusedComponent = (m.FocusedComponent - 1 + NumOfFocusableComponents) % NumOfFocusableComponents
 		if m.FocusedComponent == FocusURL {
-			m.UrlInput.Focus()
+			m.URLInput.Focus()
 		} else {
-			m.UrlInput.Blur()
+			m.URLInput.Blur()
 		}
 		return m, nil
 	case "enter":
 		if m.FocusedComponent == FocusURL {
-			return m, fetchURL(m.UrlInput.Value(), m.SelectedMethod.String())
+			return m, fetchURL(m.URLInput.Value(), m.SelectedMethod.String())
 		}
 		if m.FocusedComponent == FocusReqMethod {
 			m.DropDownOpen = true
@@ -58,7 +58,7 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 	}
 
 	if m.FocusedComponent == FocusURL {
-		m.UrlInput, cmd = m.UrlInput.Update(msg)
+		m.URLInput, cmd = m.URLInput.Update(msg)
 	}
 	return m, cmd
 }

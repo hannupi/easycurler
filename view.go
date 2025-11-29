@@ -63,7 +63,7 @@ func (m model) View() string {
 		return fmt.Sprintf("Select HTTP Method:\n%s\n(Enter to select next, Esc to cancel)", m.ReqMethods.View())
 	}
 
-	urlInput := urlInputStyle.Render(m.UrlInput.View())
+	urlInput := urlInputStyle.Render(m.URLInput.View())
 	reqMethod := reqMethodStyle.Render(string(m.SelectedMethod))
 
 	queryForms := lipgloss.JoinHorizontal(lipgloss.Bottom, reqMethod, urlInput)
