@@ -38,14 +38,25 @@ func (m model) View() string {
 		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
 
+	requestSettingsBoxStyle := lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		Padding(0, 1).
+		Width(m.Width - 5).
+		Height(m.Height/2 - 5)
+	if m.FocusedComponent == FocusRequestSettingsBox {
+		requestSettingsBoxStyle = requestSettingsBoxStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
+	}
+
 	responseBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		Padding(0, 1).
 		Width(m.Width - 5).
-		Height(m.Height - 10)
+		Height(m.Height/2 - 5)
 	if m.FocusedComponent == FocusResponseBox {
 		responseBoxStyle = responseBoxStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
+
+	requestSettingsBox := requestSettingsBoxStyle.Render(m.RequestSettingsBox.View())
 
 	responseBox := responseBoxStyle.Render(m.ResponseBox.View())
 	if m.DropDownOpen {
@@ -56,7 +67,7 @@ func (m model) View() string {
 	reqMethod := reqMethodStyle.Render(string(m.SelectedMethod))
 
 	queryForms := lipgloss.JoinHorizontal(lipgloss.Bottom, reqMethod, urlInput)
-	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, responseBox)
+	content := lipgloss.JoinVertical(lipgloss.Top, queryForms, requestSettingsBox, responseBox)
 
 	modalStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder(), false, false, false, false).

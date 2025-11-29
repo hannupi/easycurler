@@ -37,20 +37,22 @@ func (d methodDelegate) Render(w io.Writer, m list.Model, index int, item list.I
 
 const (
 	FocusURL focusableComponent = iota
+	FocusRequestSettingsBox
 	FocusResponseBox
 	FocusReqMethod
 	NumOfFocusableComponents
 )
 
 type model struct {
-	ReqMethods       list.Model
-	SelectedMethod   reqMethod
-	DropDownOpen     bool
-	UrlInput         textinput.Model
-	Width            int
-	Height           int
-	ResponseBox      viewport.Model
-	FocusedComponent focusableComponent
+	ReqMethods         list.Model
+	SelectedMethod     reqMethod
+	DropDownOpen       bool
+	UrlInput           textinput.Model
+	Width              int
+	Height             int
+	RequestSettingsBox viewport.Model
+	ResponseBox        viewport.Model
+	FocusedComponent   focusableComponent
 }
 
 func (m model) Init() tea.Cmd {
@@ -84,15 +86,17 @@ func initialModel() model {
 	ti.Prompt = ""
 	ti.Focus()
 
-	vp := viewport.New(50, 10)
+	requestSettingsBoxViewport := viewport.New(0, 0)
+	responseBoxViewport := viewport.New(0, 0)
 
 	return model{
-		UrlInput:         ti,
-		ResponseBox:      vp,
-		FocusedComponent: 0,
-		ReqMethods:       l,
-		SelectedMethod:   reqMethod("GET"),
-		DropDownOpen:     false,
+		UrlInput:           ti,
+		RequestSettingsBox: requestSettingsBoxViewport,
+		ResponseBox:        responseBoxViewport,
+		FocusedComponent:   0,
+		ReqMethods:         l,
+		SelectedMethod:     reqMethod("GET"),
+		DropDownOpen:       false,
 	}
 }
 
