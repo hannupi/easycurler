@@ -65,6 +65,8 @@ func initialModel() model {
 		reqMethod("PUT"),
 		reqMethod("DELETE"),
 		reqMethod("PATCH"),
+		reqMethod("HEAD"),
+		reqMethod("OPTIONS"),
 	}
 
 	const width = 20
