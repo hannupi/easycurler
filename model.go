@@ -47,7 +47,6 @@ type model struct {
 	SelectedMethod   reqMethod
 	DropDownOpen     bool
 	UrlInput         textinput.Model
-	Err              error
 	Width            int
 	Height           int
 	ResponseBox      viewport.Model
@@ -99,7 +98,6 @@ func initialModel() model {
 
 type (
 	httpResMsg string
-	errMsg     error
 )
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -131,10 +129,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m.ResponseBox.SetContent(string(msg))
 		m.ResponseBox.GotoTop()
-		return m, nil
-
-	case errMsg:
-		m.Err = msg
 		return m, nil
 	}
 	return m, nil

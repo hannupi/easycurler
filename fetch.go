@@ -19,19 +19,23 @@ func fetchURL(url string, reqMethod string) tea.Cmd {
 
 		req, err := http.NewRequest(method, url, nil)
 		if err != nil {
-			return errMsg(err)
+			panic(fmt.Sprintf("Error creating request: %s", err))
 		}
 
 		client := &http.Client{Timeout: 30 * time.Second}
 		res, err := client.Do(req)
 		if err != nil {
-			return errMsg(err)
+			panic(fmt.Sprintf("Error creating request: %s", err))
 		}
 		defer res.Body.Close()
+
 		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			panic(fmt.Sprintf("Unable to read res body: %s", err))
+		}
 
 		if res.StatusCode != http.StatusOK {
-			return errMsg(fmt.Errorf("HTTP error: %s", res.Status))
+			return httpResMsg(fmt.Sprintf("HTTP error: %s", res.Status))
 		}
 		return httpResMsg(strings.TrimSpace(string(body)))
 	}

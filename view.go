@@ -22,11 +22,6 @@ var reqMethodStyleBorder = lipgloss.Border{
 }
 
 func (m model) View() string {
-	if m.Err != nil {
-		// TODO recover from bad req
-		m.ResponseBox.SetContent(m.Err.Error())
-	}
-
 	reqMethodStyle := lipgloss.NewStyle().
 		AlignHorizontal(lipgloss.Center).
 		Border(reqMethodStyleBorder).
