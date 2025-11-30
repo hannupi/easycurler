@@ -87,7 +87,7 @@ func initialModel() model {
 	ti.Focus()
 
 	requestSettingsBoxViewport := viewport.New(0, 0)
-	responseBoxViewport := viewport.New(0, 0)
+	responseBoxViewport := viewport.New(0, 1)
 
 	return model{
 		URLInput:           ti,
@@ -126,11 +126,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return handleKeyInput(msg, m)
 
 	case httpResMsg:
-		if m.ResponseBox.Height != m.Height-30 {
-			// check if there is a cleaner way to resize the text box
-			// WindowSizeMsg is sent to func Update in init?
-			m.ResponseBox = viewport.New(0, m.Height-30)
-		}
 		m.ResponseBox.SetContent(string(msg))
 		m.ResponseBox.GotoTop()
 		return m, nil

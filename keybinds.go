@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -48,8 +46,6 @@ func handleKeyInput(msg tea.KeyMsg, m model) (model, tea.Cmd) {
 		}
 		if m.FocusedComponent == FocusReqMethod {
 			m.DropDownOpen = true
-			selectedMethod := m.ReqMethods.SelectedItem()
-			fmt.Println(selectedMethod)
 			return m, nil
 		}
 	case "?":
