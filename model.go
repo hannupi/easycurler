@@ -70,9 +70,8 @@ func initialModel() model {
 		reqMethod("OPTIONS"),
 	}
 
-	const width = 20
 	height := len(methods) + 2
-	l := list.New(methods, methodDelegate{}, width, height)
+	l := list.New(methods, methodDelegate{}, 10, height)
 	l.SetShowTitle(false)
 	l.SetShowPagination(false)
 	l.SetFilteringEnabled(false)
@@ -120,6 +119,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
 		m.Height = msg.Height
+
+		m.ResponseBox.Width = int(float64(m.Width) * 0.98)
+		m.ResponseBox.Height = int(float64(m.Height) * 0.4)
+
+		m.RequestSettingsBox.Width = m.ResponseBox.Width
+		m.RequestSettingsBox.Height = m.ResponseBox.Height
+
+		m.ReqMethods.SetSize(int(float64(m.Width)*0.05), m.ReqMethods.Height())
+		m.URLInput.Width = int(float64(m.Width) * 0.93)
 		return m, nil
 
 	case tea.KeyMsg:

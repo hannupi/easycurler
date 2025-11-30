@@ -23,9 +23,9 @@ var reqMethodStyleBorder = lipgloss.Border{
 
 func (m model) View() string {
 	reqMethodStyle := lipgloss.NewStyle().
-		AlignHorizontal(lipgloss.Center).
 		Border(reqMethodStyleBorder).
-		Width(10)
+		Width(m.ReqMethods.Width()).
+		AlignHorizontal(lipgloss.Center)
 	if m.FocusedComponent == FocusReqMethod {
 		reqMethodStyle = reqMethodStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
@@ -33,7 +33,7 @@ func (m model) View() string {
 	urlInputStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder(), true, true, true, false).
 		Padding(0, 1).
-		Width(m.Width - 16)
+		Width(m.URLInput.Width)
 	if m.FocusedComponent == FocusURL {
 		urlInputStyle = urlInputStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
@@ -41,8 +41,8 @@ func (m model) View() string {
 	requestSettingsBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		Padding(0, 1).
-		Width(m.Width - 5).
-		Height(m.Height/2 - 5)
+		Width(m.RequestSettingsBox.Width).
+		Height(m.RequestSettingsBox.Height)
 	if m.FocusedComponent == FocusRequestSettingsBox {
 		requestSettingsBoxStyle = requestSettingsBoxStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
@@ -50,8 +50,8 @@ func (m model) View() string {
 	responseBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		Padding(0, 1).
-		Width(m.Width - 5).
-		Height(m.Height/2 - 5)
+		Width(m.ResponseBox.Width).
+		Height(m.ResponseBox.Height)
 	if m.FocusedComponent == FocusResponseBox {
 		responseBoxStyle = responseBoxStyle.BorderForeground(lipgloss.Color(selectedBorderColor))
 	}
